@@ -1,0 +1,24 @@
+from django.db import models
+import datetime
+
+# Create your models here.
+
+current_time = datetime.datetime.now()
+
+class Scan(models.Model):
+
+    name = models.TextField(null=False, blank=False)
+    created = models.DateTimeField(null=False, blank=False, default=current_time)
+    last_run = models.DateTimeField(null=False, blank=False, default=current_time)
+
+
+class Ip(models.Model):
+
+    ip = models.TextField(null=False, blank=False)
+    scan = models.ForeignKey(Scan, null=False)
+
+class Port(models.Model):
+   
+    ip = models.ForeignKey(Ip, null=True, blank=True)
+    number = models.IntegerField(null=False)
+    active = models.BooleanField(default=False)

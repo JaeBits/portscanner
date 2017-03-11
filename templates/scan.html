@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load static from staticfiles %}
+
+{% block main-content %}
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+            <div class="col-lg-12">
+            	<div class="row">
+                    <h1 class="page-header">
+                        New Scan
+                    </h1>
+                </div>
+       
+           
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-cogs fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"></div>
+                                <div>Specify details for new scan</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+					<form method="post">
+						{% csrf_token %}
+						{{ form_scan.as_p }}
+						<a>
+						<div class="panel-footer">
+
+						<input type="submit" value="Start Scan" class="btn btn-primary" style="margin-right:40%;" />
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+						</a>
+					</form>
+            </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+{% endblock %}
