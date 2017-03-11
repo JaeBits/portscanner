@@ -29,7 +29,8 @@ def new_scan(request):
 			for port in ports:
 				print(port)
 
-			scanner.save_scan(name, ip_addresses, ports)
+			new_scan = scanner.save_scan(name, ip_addresses, ports)
+			
 
 			# redirect to a new URL:
 			url = '/scan/' + str(1)

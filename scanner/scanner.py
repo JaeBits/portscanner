@@ -4,7 +4,7 @@ if platform.system() == 'Linux':
 	import models
 else:
 	from scanner import models
-	
+
 import ipaddress
 
 def save_scan(name, ip_addresses, ports):
@@ -40,12 +40,11 @@ def save_scan(name, ip_addresses, ports):
 					new_port.number = port
 					new_port.save()
 
+	return new_scan
 
+def run_scan(scan):
 
+	ip_address = models.Ip.objects.filter(scan=scan)
+	
 
-
-	return ('hi')
-
-def run_scan():
-	print('run')
 	return('run')
