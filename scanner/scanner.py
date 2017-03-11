@@ -1,4 +1,10 @@
-from scanner import models
+import platform
+
+if platform.system() == 'Linux':
+	import models
+else:
+	from scanner import models
+	
 import ipaddress
 
 def save_scan(name, ip_addresses, ports):
