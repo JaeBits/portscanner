@@ -6,6 +6,7 @@ else:
 	from scanner import models
 
 import ipaddress
+from scapy.all import *
 
 def save_scan(name, ip_addresses, ports):
 
@@ -45,6 +46,27 @@ def save_scan(name, ip_addresses, ports):
 def run_scan(scan):
 
 	ip_address = models.Ip.objects.filter(scan=scan)
+
+	for ip in ipaddress:
+		ports = models.Port.objects.filter(ip=ip)
+
+		for port in ports:
+			src_port = RandShort()
+			dst_port = port.number
+			i = ip.ip
+
+			scan = sr1(IP(dst=i)/TCP(sport=src_port,dport=dst_port,flags="S"),timeout=10)
+			
+			if scan is None:
+				port.active = 0
+			elif(scan.haslayer(TCP)):
+				if(scan.getlayer(TCP).flags==0x12):
+					port.active = 1
+			else:
+				port.active = 2
+
+			port.save()
+
 	
 
 	return('run')
