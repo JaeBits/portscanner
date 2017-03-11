@@ -1,3 +1,6 @@
+from scanner import models
+
+
 from django.shortcuts import render
 from django import forms
 from scanner import scanner as scanner
@@ -33,7 +36,7 @@ def new_scan(request):
 			
 
 			# redirect to a new URL:
-			url = '/scan/' + str(1)
+			url = '/scan/' + str(new_scan.id)
 			return HttpResponseRedirect(url)
 
 	else:
@@ -42,8 +45,14 @@ def new_scan(request):
 	return render(request, 'scan.html', {'form_scan':form_scan})
 
 
-def scan():
-	print('hi')
+def scan(request, id):
+
+	scan = models.Scan.objects.get(id=id)
+	ip_addresses = models.Ip.objects.filter(scan=scan)
+	ports = models.Port.objects.filter(scan=scan)
+
+	return render(request, 'results.html', {'scan':scan, 'ip_addresses':ip_addresses, 'ports':ports})
+
 
 class ScanForm(forms.Form):
 	name = forms.CharField(required=True, label="", help_text="",widget=forms.TextInput(attrs={ 'class': 'form-control', 'placeholder': 'Name for this scan' }))

@@ -33,6 +33,7 @@ def save_scan(name, ip_addresses, ports):
 						new_port = models.Port()
 						new_port.ip = new_ip
 						new_port.number = port_num
+						new_port.scan = scan
 						new_port.save()
 						port_num +=1
 				else:

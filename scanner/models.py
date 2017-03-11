@@ -20,5 +20,6 @@ class Ip(models.Model):
 class Port(models.Model):
    
     ip = models.ForeignKey(Ip, null=True, blank=True)
+    scan = models.ForeignKey(Scan, null=False)
     number = models.IntegerField(null=False)
     active = models.IntegerField(null=False, default = 0)

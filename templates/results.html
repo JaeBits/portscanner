@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load static from staticfiles %}
+
+{% block main-content %}
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+            <div class="col-lg-12">
+            	<div class="row">
+                    <h1 class="page-header">
+                        {{scan.name}}
+                    </h1>
+                </div>
+       
+           
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-cogs fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"></div>
+                                <div>Results from Scan</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                {%for ip in ip_addresses%}
+
+                    <ol class="breadcrumb">
+                      <li>Host Address: {{ip.ip}}</li>
+                    </ol>
+
+
+
+
+
+                {%endfor%}
+
+
+
+            </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container-fluid -->
+
+</div>
+{% endblock %}
