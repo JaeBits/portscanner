@@ -29,19 +29,72 @@
                         </div>
                     </div>
 
+                    <a href="/rescan/{{scan.id}}">
+                        <div class="panel-footer">
+                            <span class="pull-left">Rerun scan</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+
                 </div>
+                <div class="panel-group" id="accordion">
+                    {%for ip in ip_addresses%}
 
-                {%for ip in ip_addresses%}
+                    <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ip.id}}">
+                        Host name: {{ip.ip}}</a>
+                      </h4>
+                    </div>
+                    <div id="collapse{{ip.id}}" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Port Number</th>
+                                <th>State</th>
+                              </tr>
+                            </thead>
+                            <tbody>
 
-                    <ol class="breadcrumb">
-                      <li>Host Address: {{ip.ip}}</li>
-                    </ol>
+                                {%for port in ports%}
+
+                                    {%if port.ip == ip%}
+                                      <tr>
+                                        <td>{{port.number}}</td>
+
+                                        {%if port.active == 0 %}
+
+                                            <td>Closed</td>
+                                        {%elif port.active == 1%}
+                                            <td>Open</td>
+                                        {%else%}
+                                            <td>Filtered</td>
+                                        {%endif%}
+
+                                      </tr>
+
+                                    {%endif%}
+
+                                {%endfor%}
+                            </tbody>
+                          </table>
+                          
+
+
+                      </div>
+                    </div>
+                  </div>
 
 
 
 
+                    {%endfor%}
 
-                {%endfor%}
+
+                </div> 
 
 
 

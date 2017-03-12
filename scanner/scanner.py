@@ -1,12 +1,13 @@
 import platform
 
 if platform.system() == 'Linux':
-	import models
+	import models as models
+	import scanport as scanport
 else:
-	from scanner import models
+	from scanner import models as models
+	from scanner import scanport as scanport
 
 import ipaddress
-from scapy.all import *
 
 def save_scan(name, ip_addresses, ports):
 
@@ -33,41 +34,36 @@ def save_scan(name, ip_addresses, ports):
 						new_port = models.Port()
 						new_port.ip = new_ip
 						new_port.number = port_num
-						new_port.scan = scan
+						new_port.scan = new_scan
 						new_port.save()
 						port_num +=1
 				else:
 					new_port = models.Port()
 					new_port.ip = new_ip
 					new_port.number = port
+					new_port.scan = new_scan
 					new_port.save()
+
+	run_scan(new_scan)
 
 	return new_scan
 
+
 def run_scan(scan):
 
-	ip_address = models.Ip.objects.filter(scan=scan)
+	print(scan.name)
 
-	for ip in ipaddress:
+	ip_addresses = models.Ip.objects.filter(scan=scan)
+
+	for ip in ip_addresses:
 		ports = models.Port.objects.filter(ip=ip)
+		print(ip.ip)
 
 		for port in ports:
-			src_port = RandShort()
-			dst_port = port.number
-			i = ip.ip
-
-			scan = sr1(IP(dst=i)/TCP(sport=src_port,dport=dst_port,flags="S"),timeout=10)
-			
-			if scan is None:
-				port.active = 0
-			elif(scan.haslayer(TCP)):
-				if(scan.getlayer(TCP).flags==0x12):
-					port.active = 1
-			else:
-				port.active = 2
-
+			scan_result = scanport.scan_port(ip.ip, port.number)
+			port.active = scan_result
 			port.save()
 
-	
 
-	return('run')
+
+

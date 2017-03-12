@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^scan/(?P<id>\w+)', views.scan),
     url(r'^scans/', views.scans),
     url(r'^new/', views.new_scan),
+    url(r'^rescan/(?P<id>\w+)', views.rescan),
 ]

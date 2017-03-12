@@ -1,6 +1,6 @@
 from scanner import models
 
-
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
 from scanner import scanner as scanner
@@ -12,8 +12,11 @@ def index(request):
 	return render(request, 'index.html')
 
 
-def scans():
-	print('hi')
+def scans(request):
+	scans = models.Scan.objects.all()
+
+	return render(request, 'scans.html', {'scans':scans})
+
 
 
 def new_scan(request):
@@ -34,7 +37,7 @@ def new_scan(request):
 
 			new_scan = scanner.save_scan(name, ip_addresses, ports)
 			
-
+			print(new_scan.id)
 			# redirect to a new URL:
 			url = '/scan/' + str(new_scan.id)
 			return HttpResponseRedirect(url)
@@ -43,6 +46,13 @@ def new_scan(request):
 		form_scan = ScanForm()
 
 	return render(request, 'scan.html', {'form_scan':form_scan})
+
+def rescan(request, id):
+	scan = models.Scan.objects.get(id=id)
+	scanner.run_scan(scan)
+	url = '/scan/' + str(scan.id)
+	return HttpResponseRedirect(url)
+
 
 
 def scan(request, id):
@@ -56,8 +66,8 @@ def scan(request, id):
 
 class ScanForm(forms.Form):
 	name = forms.CharField(required=True, label="", help_text="",widget=forms.TextInput(attrs={ 'class': 'form-control', 'placeholder': 'Name for this scan' }))
-	ip_addresses = forms.CharField(required=False, label="", help_text="",widget=forms.Textarea(attrs={ 'class': 'form-control', 'placeholder': 'Please input an ip address, ip addresses seperated by commas, or an ip address network' }))
-	ports = forms.CharField(required=False, label="", help_text="",widget=forms.Textarea(attrs={ 'class': 'form-control', 'placeholder': 'Please input ports to be scanned seperated by commas or a range with a dash' }))
+	ip_addresses = forms.CharField(required=False, label="", help_text="",widget=forms.Textarea(attrs={ 'class': 'form-control', 'placeholder': 'Please input an ip address, ip addresses seperated by commas, or an ip address network. ex: 192.168.208.101, 192.168.207.0/24' }))
+	ports = forms.CharField(required=False, label="", help_text="",widget=forms.Textarea(attrs={ 'class': 'form-control', 'placeholder': 'Please input ports to be scanned seperated by commas or a range with a dash. ex: 21-25, 53, 80, 445-447' }))
 	
 	def remove_whitespaces(self, code):
 		code = code.strip()
@@ -106,9 +116,4 @@ class ScanForm(forms.Form):
 					raise forms.ValidationError('Ports must be integer values seperated by commas or a range with a dash. Please check syntax near port ' + range_port)
 
 
-
 		return ports
-
-
-
-
